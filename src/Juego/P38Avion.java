@@ -6,19 +6,20 @@ import javax.imageio.*; //imagenes
 
 public class P38Avion extends Personaje {
 
+    
+
     private int velocidad;
     private estados estadoActual;
     private boolean animacion=false;
     private static int powerVelocidad=0;
-    /**********************/
-    private int energiaActual;
-    private int energiaMaxima;    
-    /*******************/
-        
+    private boolean powerUpActivo;
+    private boolean superShellActivo;
+    private boolean autoDisparo;
+    private static double energia;
     
     public static P38Avion p38avion;
 
-    public enum estados { // Los estados del personaje son publicos para poder cambiarlo a medida que transcurre el juego.
+    public enum estados { 
         VIVO,
         MURIENDO,
     }
@@ -31,6 +32,9 @@ public class P38Avion extends Personaje {
         cajaColision = new Rectangle((int) this.positionX, (int) this.positionY, 45, 45); // Tamaño total de la imagen
         puedeDisparar=true;
         p38avion=this;
+        powerUpActivo = false;
+        superShellActivo = false;
+        energia = 100;
         arma=new Arma(Arma.tipoMunicion.P38MUNICION, 0, 0);
     }
 
@@ -38,13 +42,30 @@ public class P38Avion extends Personaje {
     public void display(Graphics2D g2){
         g2.drawImage(imagen, (int) this.positionX, (int) this.positionY, 45, 45, null, null);           
     }
-
-    /**********************************/
-    public int getPorcentajeEnergia() {
-        return (energiaActual * 100) / energiaMaxima;
+    
+    public double getEnergia(){
+        return P38Avion.energia;
     }
-    /*******************************************/
 
+    public static void setEnergia(double energia) {
+        P38Avion.energia = energia;
+    }
+  
+    
+    public boolean getPowerUpActivo(){
+        return this.powerUpActivo;
+    }
+    public void activarPowerUp(boolean estado){
+        this.powerUpActivo = estado;
+    }
+    public void activarSuperShell(boolean estado){
+        this.superShellActivo = estado;
+    }
+    public boolean getSuperShellActivo(){
+        return this.superShellActivo;
+    }
+    
+    
     public void update(double delta) {
         
         if (animacion){
@@ -86,6 +107,9 @@ public class P38Avion extends Personaje {
             updateCajaColision(); 
             updateArma((int)this.positionX+15, (int)this.positionY);
             Escenario.get_nivel().colisionBonus(this.cajaColision);
+            
+
+            
             if(estadoActual != estados.MURIENDO && estadoActual == estados.VIVO){
                 if(Escenario.get_nivel().colisionMunicionEnemiga(this)){
                     this.cambiar(estados.MURIENDO);
@@ -97,7 +121,7 @@ public class P38Avion extends Personaje {
     
             
             if (estadoActual == estados.VIVO) {
-                
+
                 try {
                     spriteCounter++;
                     if (spriteCounter > 10) { 
@@ -123,23 +147,28 @@ public class P38Avion extends Personaje {
     
                 return;
             }
-            if (estadoActual == estados.MURIENDO){
+
+            if (estadoActual == estados.MURIENDO) {
                 try {
-    
                     spriteCounter++;
-    
-                    if (spriteCounter > 7 && spritePosition<7) {
-    
-                        spritePosition++;
-                        
-                        imagen = ImageIO.read(getClass().getResource("imagenes/fuego" + spritePosition + ".png"));
-                        spriteCounter = 0;
+
+                    
+                    if (spritePosition < 7) {
+                        if (spriteCounter > 7) {
+                            spritePosition++;
+                            
+                            String nombreImagen = "fuego" + spritePosition + ".png";
+                            imagen = ImageIO.read(getClass().getResource("imagenes/" + nombreImagen));
+                            spriteCounter = 0;
+                        }
                     }
-    
                 } catch (IOException e) {
+                    
                     System.out.println(e);
                 }
             }
+
+            
         }
     }
 
@@ -151,7 +180,7 @@ public class P38Avion extends Personaje {
             case VIVO:{
                 puedeDisparar=true;
                 spritePosition = 0;
-                this.velocidad=150;
+                this.velocidad=1000;
             }
                 break;
             case MURIENDO:{
@@ -232,6 +261,24 @@ public class P38Avion extends Personaje {
     }
 
     public void finalizaPower(){
-
+        
     }
+    
+    public void activarAutoDisparo() {
+        autoDisparo = true;
+    }
+
+    public void desactivarAutoDisparo() {
+        autoDisparo = false;
+    }
+    
+     public void disparoAutomatico() {
+    if (autoDisparo) {
+        arma.disparo();
+    }
+}
+
+    
+ 
+
 }

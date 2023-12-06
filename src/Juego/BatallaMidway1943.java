@@ -24,12 +24,19 @@ public class BatallaMidway1943 extends JGame {
     private double timerPower = 0;
     private static int score = 0;
     private static int numeroNivel = 1;
-    private static int energia = 2;
+    //private static double energia = 100;
+    private int aux = 0;
+    private double tiempoTranscurridoEnergia = 0;
+    private static final double TIEMPO_PERDIDA_ENERGIA = 5.0;
 
+    
     public static boolean esjefe = false;
     public static BatallaMidway1943 juego;
     public final String PERSONAJE = appProperties.getProperty("personaje");
     public final String MUSICAFONDO = appProperties.getProperty("pista") + ".wav";
+    
+
+    
 
     public enum gameStatus {
         MENU_PRINCIPAL,
@@ -46,6 +53,7 @@ public class BatallaMidway1943 extends JGame {
     public BatallaMidway1943() {
         super("Juego", 800, 600);
         juego = this;
+        System.out.println("Musicafondo" + MUSICAFONDO);
     }
 
     public static void main(String args[]) {
@@ -115,7 +123,7 @@ public class BatallaMidway1943 extends JGame {
             menuprincipal.display(g);
             g.setColor(Color.BLACK);
             drawStyledString(g, "THE BATTLE OF MIDWAY", 400, 250, true);
-            drawStyledString(g, "GAME OVER", 400, 300, true);
+            //drawStyledString(g, "GAME OVER", 400, 300, true);
             if (timer % 1 < 0.5) {
                 drawStyledString(g, "PLEASE INSERT COIN", 405, 350, true);
             }
@@ -138,11 +146,15 @@ public class BatallaMidway1943 extends JGame {
         if (estadoJuego == gameStatus.GAME_OVER) {
 
             g.setFont(font);
-            drawStyledString(g, "GAME OVER", 400, 200, true);
-            //g.setColor(Color.BLACK);
-            //g.fill(rectangulo);
-            actualizarRect(g);
-
+            menuprincipal.display(g);
+            g.setColor(Color.BLACK);
+            drawStyledString(g, "THE BATTLE OF MIDWAY", 400, 250, true);
+            drawStyledString(g, "GAME OVER", 400, 300, true);
+            if (timer % 1 < 0.5) {
+                drawStyledString(g, "PLEASE INSERT COIN", 405, 350, true);
+            }
+            drawStyledString(g, "© 2023 Ana-Eliana-Magali", 400, 450, true);
+            drawStyledString(g, "ALL RIGHTS RESERVED", 400, 500, true);
             return;
         }
 
@@ -155,7 +167,7 @@ public class BatallaMidway1943 extends JGame {
         }
 
         if (estadoJuego == gameStatus.BONUS || estadoJuego == gameStatus.POWERUP) {
-
+            
             nivel.display(g);
             personajePrincipal.display(g);
             //g.setColor(Color.BLACK);
@@ -186,6 +198,7 @@ public class BatallaMidway1943 extends JGame {
         g.setFont(font.deriveFont(20f));
 
         if (estadoJuego == gameStatus.BONUS) {
+            
             drawStyledString(g, Integer.toString((int) timerBonus), 671, 120, false);
         } else if (estadoJuego == gameStatus.POWERUP) {
             drawStyledString(g, Integer.toString((int) timerPower), 671, 120, false);
@@ -202,52 +215,55 @@ public class BatallaMidway1943 extends JGame {
         drawStyledString(g, Integer.toString(hiScore), 255, 90, false);
         drawStyledString(g, "REST", 100, 530, false);
         //drawStyledString(g, Integer.toString(energia), 100, 570, false);
-        drawHealthBar(g,100,570,200,10,2,energia);
+        //drawHealthBar(g,100,570,200,10,100,energia);
+        drawHealthBar(g, 100, 570, 200, 10, 100, personajePrincipal.getEnergia());
+
         drawStyledString(g, "STAGE", 600, 530, false);
         drawStyledString(g, Integer.toString(numeroNivel), 670, 570, false);
         //g.setColor(Color.BLACK);
 
     }
-/*****************/
-public void drawHealthBar(Graphics g, int x, int y, int width, int height, int maxHealth, int currentHealth) {
-    // Calcular el porcentaje de vida actual
-    double healthPercentage = (double) currentHealth / maxHealth;
+    /**
+     * **************
+     */
+    public void drawHealthBar(Graphics g, int x, int y, int width, int height, int maxHealth, double currentHealth) {
+        // Calcular el porcentaje de vida actual
+        double healthPercentage = (double) currentHealth / maxHealth;
 
-    // Calcular el ancho de la barra de vida según el porcentaje
-    int barWidth = (int) (width * healthPercentage);
+        // Calcular el ancho de la barra de vida según el porcentaje
+        int barWidth = (int) (width * healthPercentage);
 
-    // Dibujar el fondo de la barra de vida en color gris
-    g.setColor(Color.BLACK);
-    g.fillRect(x, y, width, height);
+        // Determinar el color según el porcentaje de energía
+        Color barColor;
+        if (healthPercentage <= 0.3) {
+            // Menor o igual al 30%, color rojo
+            barColor = Color.RED;
+        } else if (healthPercentage <= 0.6) {
+            // Entre el 40% y el 60%, color naranja
+            barColor = new Color(255, 102, 0);
+        } else {
+            // Mayor al 60%, color amarillo
+            barColor = Color.YELLOW;
+        }
 
-    // Dibujar la barra de vida actual en color verde
-    g.setColor(Color.YELLOW);
-    g.fillRect(x, y, barWidth, height);
+        // Dibujar el fondo de la barra de vida en color gris
+        g.setColor(Color.BLACK);
+        g.fillRect(x, y, width, height);
 
-    // Dibujar el contorno de la barra de vida en color negro
-    g.setColor(Color.BLACK);
-    g.drawRect(x, y, width, height);
-}
-/******************************/
-/*******************************/
-public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, double timeElapsed, double energyDecreaseRate) {
-    // Calcular la cantidad de energía que se debe disminuir
-    double energyDecrease = energyDecreaseRate * timeElapsed;
+        // Dibujar la barra de vida actual en el color correspondiente
+        g.setColor(barColor);
+        g.fillRect(x, y, barWidth, height);
 
-    // Restar la cantidad de energía disminuida al valor actual de energía
-    double newEnergy = currentEnergy - energyDecrease;
-
-    // Asegurarse de que el nuevo valor de energía no sea menor que cero
-    if (newEnergy < 0) {
-        newEnergy = 0;
+        // Dibujar el contorno de la barra de vida en color negro
+        g.setColor(Color.BLACK);
+        g.drawRect(x, y, width, height);
     }
 
-    // Retornar el nuevo valor de energía
-    return newEnergy;
-}
 
+    /**
+     * ***************************
+     */
 
-/*****************************/
     @Override
     public void gameShutdown() {
     }
@@ -326,7 +342,8 @@ public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, dou
             timer += delta;
             if (timer > 11) {
                 estadoJuego = gameStatus.MENU_PRINCIPAL;
-                energia = 100;
+                P38Avion.setEnergia(100);
+                
                 Escenario.clear();
                 timer = 0;
                 rank.actualizar(score);
@@ -341,7 +358,7 @@ public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, dou
             timer += delta;
             if (timer > 11) {
                 estadoJuego = gameStatus.MENU_PRINCIPAL;
-                energia = 100;
+                P38Avion.setEnergia(100);                
                 timer = 0;
             }
 
@@ -364,16 +381,62 @@ public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, dou
         if (estadoJuego == gameStatus.LOOP || estadoJuego == gameStatus.BONUS || estadoJuego == gameStatus.POWERUP) {
 
             System.out.println("Loop o Bonus o Powerup");
+            /**
+             * *********
+             */
+            tiempoTranscurridoEnergia += delta;
+            if (tiempoTranscurridoEnergia >= TIEMPO_PERDIDA_ENERGIA) {
+                
+                double aux_  = personajePrincipal.getEnergia() - 5;
+                
+                personajePrincipal.setEnergia(aux_);
+                //energia -= 5; // Disminuir la energía en un 5%
+                if (personajePrincipal.getEnergia() <= 0) {
+                    personajePrincipal.setEnergia(0);
+                    //energia = 0;
+                }
+                tiempoTranscurridoEnergia = 0; // Reiniciar el contador
+
+                // Verificar si la energía es cero y cambiar a GAME_OVER
+                if (personajePrincipal.getEnergia() == 0) {
+                    estadoJuego = gameStatus.GAME_OVER;
+                    try {
+                        //FXPlayer.GAME_OVER.play(-20.0f);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    rank.actualizar(score);
+                    score = 0;
+                    rank = new Ranking();
+                    hiScore = rank.getTop();
+                    Escenario.clear();
+                }
+            }
+            
+
+            /**
+             * **************
+             */
+            if(personajePrincipal.getPowerUpActivo() && aux == 0){
+                
+                bonus();
+                aux=1;
+            }
 
             if ((estadoJuego == gameStatus.BONUS) && !(personajePrincipal.getEstado() == P38Avion.estados.MURIENDO)) {
+                
                 if (timerBonus == 20) {
                     try {
+                        
                         // FXPlayer.STAGE1.stop();
                         stopMusica();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (timerBonus < 0) {
+                    if(personajePrincipal.getSuperShellActivo()){
+                        personajePrincipal.activarSuperShell(false);
+                    }
                     estadoJuego = gameStatus.LOOP;
                     // FXPlayer.STAGE1.loop(-20.0f);
                     reproducirMusica();
@@ -417,11 +480,13 @@ public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, dou
                 }
 
                 if (timer > 4) {
-                    energia--;
+                    personajePrincipal.setEnergia(personajePrincipal.getEnergia()-1);
+                    //energia--;
                     esjefe = false;
                     personajePrincipal.restaurar();
-                    if (energia < 0) {
-                        energia = 0;
+                    if (personajePrincipal.getEnergia() <= 0) {
+                        personajePrincipal.setEnergia(0);
+                        //energia = 0;
                         this.estadoJuego = gameStatus.GAME_OVER;
                         try {
                             //FXPlayer.GAME_OVER.play(-20.0f);
@@ -449,25 +514,25 @@ public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, dou
 
                 timer += delta ;
                 personajePrincipal.update(delta);
-
+                
                 return;
             }
 
             for (KeyEvent event : keyEvents) {
-                System.out.println("Dentro del for");
+                
 
                 if ((event.getID() == KeyEvent.KEY_PRESSED) && (event.getKeyCode() == KeyEvent.VK_ESCAPE)) {
-                    System.out.println("Escape");
+                    
                     stop();
                 }
 
-                if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == KeyEvent.VK_SPACE)/*&&(KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("disparo")))*/) {
-                    System.out.println("DisparoX");
+                if ((event.getID() == KeyEvent.KEY_PRESSED) && (event.getKeyCode() == KeyEvent.VK_SPACE)/*&&(KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("disparo")))*/) {
+                    
                     personajePrincipal.disparar();
                 }
 
                 if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == KeyEvent.VK_P) /*&&(KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("pausa")))*/) {
-                    System.out.println("PausaEspacio");
+                    
                     this.estadoJuego = gameStatus.PAUSA;
                     // FXPlayer.STAGE1.stop();
                     stopMusica();
@@ -490,53 +555,55 @@ public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, dou
 
                 if ((event.getKeyCode() == KeyEvent.VK_DOWN) /*&& (KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("abajo")))*/) {
                     //this.down = event.getKeyCode();
-                    System.out.println("Guarda Abajo");
+                    
                     this.down = KeyEvent.VK_DOWN;
                 }
 
                 if ((event.getKeyCode() == KeyEvent.VK_UP) /*&& (KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("arriba")))*/) {
                     //this.up = event.getKeyCode();
-                    System.out.println("Guarda arriba");
+                   
                     this.up = KeyEvent.VK_UP;
                 }
 
                 if ((event.getKeyCode() == KeyEvent.VK_LEFT) /*&& (KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("izquierda")))*/) {
                     //this.left = event.getKeyCode();
-                    System.out.println("guarda izquierda");
+                    
                     this.left = KeyEvent.VK_LEFT;
                 }
 
                 if ((event.getKeyCode() == KeyEvent.VK_RIGHT)/*&&(KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("derecha")))*/) {
                     //this.right = event.getKeyCode();
-                    System.out.println("guarda derecha");
+                    
                     this.right = KeyEvent.VK_RIGHT;
                 }
 
             }
 
             if (keyboard.isKeyPressed(down) ) {
-                System.out.println("Abajo" + down);
+               
                 personajePrincipal.down(delta);
                 this.down = 0;
             }
             if (keyboard.isKeyPressed(up) ) {
-                System.out.println("arriba" + up);
+                
                 personajePrincipal.up(delta);
                 this.up=0;
             }
             if (keyboard.isKeyPressed(left) ) {
-                System.out.println("izquierda" + left);
+                
                 personajePrincipal.left(delta);
                 this.left = 0;
             }
             if (keyboard.isKeyPressed(right) ) {
-                System.out.println("derecha" + right);
+                
                 personajePrincipal.right(delta);
                 this.right=0;
             }
 
             personajePrincipal.update(delta);
+            
 
+            
         }
 
     }
@@ -558,23 +625,31 @@ public double decreaseEnergyOverTime(double currentEnergy, double maxEnergy, dou
 
     }
 
+    public static void llenarTanque() {
+        P38Avion.setEnergia(100);
+        //energia = 100;
+    }
     protected void bonus() {
         this.estadoJuego = gameStatus.BONUS;
         timerBonus = 20;
+        if (personajePrincipal.getSuperShellActivo()) {
+            disparoContinuo();
+        }
     }
-
+    private void disparoContinuo() {
+        
+    }
+    
     protected void powerup() {
         this.estadoJuego = gameStatus.POWERUP;
         timerPower = 35;
     }
 
-    public static void toggleBoss() {
+    public static void esJefe() {
         esjefe = true;
     }
 
-    public static void sumarEnergia() {
-        energia++;
-    }
+
 
     public void siguienteNivel() {
         stopMusica();

@@ -134,6 +134,7 @@ public abstract class JGame extends GameLoop {
         g.dispose();
     }
 
+    @Override
     public void shutdown() {
         gameShutdown();
         frame.dispose();

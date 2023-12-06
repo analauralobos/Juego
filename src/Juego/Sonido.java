@@ -16,7 +16,7 @@ public enum Sonido {
     FUEGO("fuego.wav"),
     INCOGNITO("incognito.wav"),
     INCOGNITO_ROTO("incognito_roto.wav"),
-    BONUS("bonus.wav"),
+    BONUS("bonus.WAV"),
     PAUSA("pausa.wav"),
     BOSS1("boss1.wav"),
     BOSSHIT("bosshit.wav"),

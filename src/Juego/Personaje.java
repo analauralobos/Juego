@@ -11,6 +11,7 @@ public abstract class Personaje extends ObjetoGrafico implements Movimiento {
     protected Rectangle cajaColision; 
     protected Arma arma; 
     protected boolean puedeDisparar;
+    private int energia;
 
     public Personaje(String filename) {
         super(filename);
@@ -21,8 +22,10 @@ public abstract class Personaje extends ObjetoGrafico implements Movimiento {
         this.imagen = img;
     }
 
+    @Override
     public abstract void display(Graphics2D g2);
 
+    @Override
     public abstract void update(double delta);
 
     protected void updateCajaColision() {
