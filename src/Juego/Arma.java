@@ -16,7 +16,7 @@ public class Arma {
     }
 
     private tipoMunicion municionActual;
-
+    Sonido musica= new Sonido();
     public Arma(tipoMunicion municionActual, int x, int y) {
         this.municionActual = municionActual;
         this.x = x;
@@ -87,7 +87,8 @@ public class Arma {
                     if (municionActual == tipoMunicion.P38MUNICION) {
                         Escenario.get_nivel().municionHeroe.add(new P38Municion("imagenes/P38Municion0.png", this.x, this.y));
                         try {
-//                            FXPlayer.P38MUNICION.play(-5.0f);
+                            musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -96,7 +97,8 @@ public class Arma {
                     if(municionActual == tipoMunicion.ESCOPETA){
                         Escenario.get_nivel().municionHeroe.add(new Escopeta("imagenes/escopeta0.png", this.x, this.y));
                         try {
-                           // FXPlayer.ESPADA.play(-5.0f);
+                           musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -105,7 +107,8 @@ public class Arma {
                     if (municionActual == tipoMunicion.LASER) {
                         Escenario.get_nivel().municionHeroe.add(new Laser("imagenes/laser0.png", this.x, this.y));
                         try {
-                            //FXPlayer.laser.play(-5.0f);
+                            musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -114,7 +117,8 @@ public class Arma {
                     if (municionActual == tipoMunicion.AMETRALLADORA) {
                         Escenario.get_nivel().municionHeroe.add(new Ametralladora("imagenes/ametralladora0.png", this.x, this.y));
                         try {
-                           // FXPlayer.AMETRALLADORA.loop(-10.0f);
+                           musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -128,7 +132,8 @@ public class Arma {
                     if (municionActual == tipoMunicion.LASER) {
                         Escenario.get_nivel().municionHeroe.add(new Laser("imagenes/laser0.png", this.x, this.y));
                         try {
-                           // FXPlayer.laser.play(-5.0f);
+                           musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -137,7 +142,8 @@ public class Arma {
                     if (municionActual == tipoMunicion.AMETRALLADORA) {
                         Escenario.get_nivel().municionHeroe.add(new Ametralladora("imagenes/ametralladora0.png", this.x, this.y));
                         try {
-                           // FXPlayer.AMETRALLADORA.loop(-10.0f);
+                           musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -152,7 +158,8 @@ public class Arma {
                         Escenario.get_nivel().municionHeroe.add(new P38Municion("imagenes/P38Municion.png", this.x-10, this.y));
                         Escenario.get_nivel().municionHeroe.add(new P38Municion("imagenes/P38Municion.png", this.x+10, this.y));
                         try {
-                           // FXPlayer.P38MUNICION.play(-5.0f);
+                           musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -163,7 +170,8 @@ public class Arma {
                         Escenario.get_nivel().municionHeroe.add(new Escopeta("imagenes/escopeta0.png", this.x-10, this.y));
                         Escenario.get_nivel().municionHeroe.add(new Escopeta("imagenes/escopeta0.png", this.x+10, this.y));
                         try {
-                           // FXPlayer.P38MUNICION.play(-5.0f);
+                           musica.setFile(3);
+                            musica.play();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

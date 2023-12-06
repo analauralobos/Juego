@@ -85,7 +85,7 @@ public abstract class Escenario {
 
         if (fondo.positionY > -350) {
             BatallaMidway1943.esJefe();
-            BatallaMidway1943.bossModeMusic();
+            
         }
 
         if (counterMapa > 2 && stop == false) {

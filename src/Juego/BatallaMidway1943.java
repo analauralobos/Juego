@@ -34,7 +34,7 @@ public class BatallaMidway1943 extends JGame {
     public static BatallaMidway1943 juego;
     public final String PERSONAJE = appProperties.getProperty("personaje");
     public final String MUSICAFONDO = appProperties.getProperty("pista") + ".wav";
-    
+    Sonido musica = new Sonido();
 
     
 
@@ -53,13 +53,15 @@ public class BatallaMidway1943 extends JGame {
     public BatallaMidway1943() {
         super("Juego", 800, 600);
         juego = this;
-        System.out.println("Musicafondo" + MUSICAFONDO);
+        
     }
 
     public static void main(String args[]) {
+        
         BatallaMidway1943 game = new BatallaMidway1943();
         game.run(1.0 / 60.0);
         System.exit(0);
+        
     }
 
     @Override
@@ -76,7 +78,8 @@ public class BatallaMidway1943 extends JGame {
             break;
         }*/
         //FXPlayer.init();
-
+        
+        
         this.personajePrincipal = new P38Avion("imagenes/" + PERSONAJE + "0.png");
         menuprincipal.setPosition(100, 5);
 
@@ -327,8 +330,9 @@ public class BatallaMidway1943 extends JGame {
                 System.out.println("Cambio a Loop");
                 estadoJuego = gameStatus.LOOP;
                 try {
-                    // FXPlayer.STAGE1.loop(-20.0f);
-                    //reproducirMusica();
+                    musica.setFile(0);
+                    musica.play();
+                    musica.loop();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -429,7 +433,7 @@ public class BatallaMidway1943 extends JGame {
                     try {
                         
                         // FXPlayer.STAGE1.stop();
-                        stopMusica();
+                        //stopMusica();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -439,7 +443,7 @@ public class BatallaMidway1943 extends JGame {
                     }
                     estadoJuego = gameStatus.LOOP;
                     // FXPlayer.STAGE1.loop(-20.0f);
-                    reproducirMusica();
+                    //reproducirMusica();
                     nivel.stop = false;
                 }
                 timerBonus -= delta * 3;
@@ -467,12 +471,14 @@ public class BatallaMidway1943 extends JGame {
             if (personajePrincipal.getEstado() == P38Avion.estados.MURIENDO) {
                 if (timer == 0) {
                     try {
-                        // FXPlayer.STAGE1.stop();
-                        //stopMusica();
+                        
+                        stopMusica();
                         if (esjefe) {
                             //FXPlayer.BOSS1.stop();
                         }
-                        //FXPlayer.MUERTE.play(-20.0f);
+                        
+                        musica.setFile(1);
+                        musica.play();
                         nivel.stop();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -489,6 +495,8 @@ public class BatallaMidway1943 extends JGame {
                         //energia = 0;
                         this.estadoJuego = gameStatus.GAME_OVER;
                         try {
+                            musica.setFile(2);
+                            musica.play();
                             //FXPlayer.GAME_OVER.play(-20.0f);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -529,14 +537,15 @@ public class BatallaMidway1943 extends JGame {
                 if ((event.getID() == KeyEvent.KEY_PRESSED) && (event.getKeyCode() == KeyEvent.VK_SPACE)/*&&(KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("disparo")))*/) {
                     
                     personajePrincipal.disparar();
+                    
                 }
 
                 if ((event.getID() == KeyEvent.KEY_RELEASED) && (event.getKeyCode() == KeyEvent.VK_P) /*&&(KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("pausa")))*/) {
                     
                     this.estadoJuego = gameStatus.PAUSA;
-                    // FXPlayer.STAGE1.stop();
+                    
                     stopMusica();
-                    //FXPlayer.PAUSA.play(-5.0f);
+                    
                 }
 
                 if ((event.getID() == KeyEvent.KEY_RELEASED) && (KeyEvent.getKeyText(event.getKeyCode()).toUpperCase().equals(appProperties.getProperty("toggle")))) {
@@ -616,14 +625,6 @@ public class BatallaMidway1943 extends JGame {
         score = score + puntos;
     }
 
-    public static void bossModeMusic() {
-
-        if (esjefe) {
-            stopMusica();
-            //FXPlayer.BOSS1.loop(-20.0f);
-        }
-
-    }
 
     public static void llenarTanque() {
         P38Avion.setEnergia(100);
@@ -652,12 +653,10 @@ public class BatallaMidway1943 extends JGame {
 
 
     public void siguienteNivel() {
-        stopMusica();
-        //FXPlayer.BOSS1.stop();
+        stopMusica();        
         if (numeroNivel == 2) {
             this.estadoJuego = gameStatus.SIGUIENTE;
-            this.personajePrincipal.setAnimacion();
-            //FXPlayer.WINGAME.play(-10f);
+            this.personajePrincipal.setAnimacion();            
         } else {
             this.estadoJuego = gameStatus.SIGUIENTE;
             this.personajePrincipal.setAnimacion();
@@ -665,26 +664,32 @@ public class BatallaMidway1943 extends JGame {
 
     }
 
-    private static void reproducirMusica() {
+public void reproducirMusica(){
         switch (numeroNivel) {
             case 1: {
-                //FXPlayer.MUSICA.loop(-20.0f);
+                musica.setFile(0);
+                musica.play();
+                musica.loop();
+               
             }
             break;
             default:
-                //FXPlayer.MUSICA.loop(-20.0f);
+                musica.setFile(0);
+                musica.play();
+                musica.loop();
+               
                 break;
         }
     }
 
-    private static void stopMusica() {
+    private void stopMusica() {
         switch (numeroNivel) {
             case 1: {
-                //FXPlayer.MUSICA.stop();
+                musica.stop();
             }
             break;
             default:
-                //FXPlayer.MUSICA.stop();
+                musica.stop();              
                 break;
         }
     }
