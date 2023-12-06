@@ -34,6 +34,7 @@ public class BatallaMidway1943 extends JGame {
     public static BatallaMidway1943 juego;
     public final String PERSONAJE = appProperties.getProperty("personaje");
     public final String MUSICAFONDO = appProperties.getProperty("pista") + ".wav";
+    
 
     
 
@@ -52,6 +53,7 @@ public class BatallaMidway1943 extends JGame {
     public BatallaMidway1943() {
         super("Juego", 800, 600);
         juego = this;
+        System.out.println("Musicafondo" + MUSICAFONDO);
     }
 
     public static void main(String args[]) {
