@@ -17,12 +17,12 @@ public class BonusPowerUp extends ContenedorBonus {
     }
 
 
-    public BonusPowerUp(String filename,int x,int y) {
+    public BonusPowerUp(String filename,int x,int y, tipoPowerUp tp) {
         super(filename);
         this.positionX=x;
         this.positionY=y;
         this.x_inicial=x;
-        this.power=tipoPowerUp.POW;
+        this.power= tp;
         this.cajaColision= new Rectangle(x,y,50,50);
         
     }
@@ -33,6 +33,7 @@ public class BonusPowerUp extends ContenedorBonus {
 
         if(this.esTomado){
             otorgarPowerUp();
+            P38Avion.p38avion.activarPowerUp(true);
             isVisible=false;
             return;
         }
@@ -148,17 +149,18 @@ public class BonusPowerUp extends ContenedorBonus {
             break;
             case AUTO:{
                 //Sonido.POWERUP.play(-20.0f);
-                //P38Avion.p38avion.celeste();
+                P38Avion.p38avion.activarAutoDisparo();
             }
             break;
             case ESTRELLANINJA:{
                 //Sonido.POWERUP.play(-20.0f);
-                P38Avion.velocidad();
+                BatallaMidway1943.llenarTanque();
             }
             break;
             case SUPERSHELL:{
                 //Sonido.POWERUP.play(-20.0f);
-                P38Avion.velocidad();
+                P38Avion.p38avion.activarSuperShell(true);
+                
             }
             break;
         }

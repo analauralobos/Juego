@@ -6,7 +6,7 @@ import java.awt.*;
 import javax.imageio.ImageIO;
 
 public class AvionVerdeMenor extends Enemigo {
-
+    
     public AvionVerdeMenor(String filename, int x, int y, boolean shot) {
         super(filename);
         this.cajaColision = new Rectangle((int) x, (int) y, 40, 40);

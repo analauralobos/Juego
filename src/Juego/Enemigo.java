@@ -8,6 +8,7 @@ public abstract class Enemigo extends Personaje{
     protected double timerDisparo=0;
     protected int puntosAlMorir;
     protected int timer=0;
+    
 
     public enum estadoEnemigo{
         VIVO,
@@ -21,6 +22,7 @@ public abstract class Enemigo extends Personaje{
         super(filename);
         this.estado = estadoEnemigo.DESACTIVADO;
         isVisible=false;
+        
     }
 
     public abstract void restaurar();

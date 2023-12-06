@@ -18,9 +18,9 @@ public abstract class Escenario {
     protected Enemigo jefeFinal;
     
     protected ArrayList<Enemigo> enemigos = new ArrayList<Enemigo>(1);
-    protected ArrayList<ContenedorBonus> esferas = new ArrayList<ContenedorBonus>(1);
+    protected ArrayList<ContenedorBonus> contenedor = new ArrayList<ContenedorBonus>(1);
     protected ArrayList<Bonus> bonusObtenibles = new ArrayList<Bonus>(1);
-    protected ArrayList<ContenedorBonus> esferasColisionables = new ArrayList<ContenedorBonus>(1);
+    protected ArrayList<ContenedorBonus> contenedorColisionable = new ArrayList<ContenedorBonus>(1);
     
     protected ArrayList<Enemigo> enemigosColisionables = new ArrayList<Enemigo>(1);
     protected ArrayList<Municion> municionEnemigaColisionada = new ArrayList<Municion>(1);
@@ -67,13 +67,13 @@ public abstract class Escenario {
         NIVEL = null;
     }
 
-    protected abstract void generarEsferas();
+    protected abstract void generarContenedores();
 
     protected abstract void generarEnemigos();
 
     public void update(double delta) {
 
-        esferasColisionables.clear();
+        contenedorColisionable.clear();
         enemigosColisionables.clear();
         municionHeroe.removeAll(municionPersColisionada);
         bonusObtenibles.clear();
@@ -84,7 +84,7 @@ public abstract class Escenario {
         }
 
         if (fondo.positionY > -350) {
-            BatallaMidway1943.toggleBoss();
+            BatallaMidway1943.esJefe();
             BatallaMidway1943.bossModeMusic();
         }
 
@@ -103,7 +103,7 @@ public abstract class Escenario {
                 }
             }
 
-            for (ContenedorBonus esfera : esferas) {
+            for (ContenedorBonus esfera : contenedor) {
                 if (!esfera.activado) {
                     esfera.positionY++;
                     esfera.updateCajaColision();
@@ -134,10 +134,10 @@ public abstract class Escenario {
             this.jefeFinal.update(delta);
         }
 
-        for (ContenedorBonus esfera : esferas) {
+        for (ContenedorBonus esfera : contenedor) {
             if (esfera.isVisible) {
                 esfera.update(delta);
-                esferasColisionables.add(esfera);
+                contenedorColisionable.add(esfera);
                 if (!esfera.esTomado && this.limites.contains(esfera.cajaColision)) {
                     bonusObtenibles.add(esfera);
                 }
@@ -186,7 +186,7 @@ public abstract class Escenario {
 
         fondo.display(g2);
 
-        for (ContenedorBonus e : esferasColisionables) {
+        for (ContenedorBonus e : contenedorColisionable) {
             e.display(g2);
         }
 
@@ -214,7 +214,7 @@ public abstract class Escenario {
     }
 
     public void addEsfera(ContenedorBonus esfera) {
-        this.esferas.add(esfera);
+        this.contenedor.add(esfera);
     }
 
 
@@ -271,7 +271,7 @@ public abstract class Escenario {
 
         
 
-        for (ContenedorBonus e : esferasColisionables) {
+        for (ContenedorBonus e : contenedorColisionable) {
             if (e.cajaColision.intersects(municion.cajaColisionMunicion)) {
                 municion.hitBonus();
                 e.golpeado = true;
@@ -328,7 +328,7 @@ public abstract class Escenario {
                 }
             }
 
-            for (ContenedorBonus e : esferas) {
+            for (ContenedorBonus e : contenedor) {
                 e.setX(raf2.readDouble());
 
                 if (lastCheckPoint == 1) {
@@ -348,7 +348,7 @@ public abstract class Escenario {
             e1.printStackTrace();
         }
 
-        esferas.removeAll(esferasRemover);
+        contenedor.removeAll(esferasRemover);
         enemigos.removeAll(enemigosRemover);
         esferasRemover.clear();
         enemigosRemover.clear();
@@ -360,9 +360,9 @@ public abstract class Escenario {
     protected void clearAll() {
 
         enemigos.clear();
-        esferas.clear();
+        contenedor.clear();
         bonusObtenibles.clear();
-        esferasColisionables.clear();
+        contenedorColisionable.clear();
         enemigosColisionables.clear();
         municionEnemigaColisionada.clear();
         municionPersColisionada.clear();

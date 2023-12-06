@@ -17,12 +17,12 @@ public class BonusArma extends ContenedorBonus{
 
     tipoArma bonusArma;
 
-    public BonusArma(String filename,int x,int y) {
+    public BonusArma(String filename,int x,int y, tipoArma tp) {
         super(filename);
         this.positionX=x;
         this.positionY=y;
         this.x_inicial=x;
-        this.bonusArma=tipoArma.P38MUNICION;
+        this.bonusArma=tp;
         this.cajaColision= new Rectangle(x,y,50,50);
        
     }

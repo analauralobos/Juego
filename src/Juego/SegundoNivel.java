@@ -12,7 +12,7 @@ public class SegundoNivel extends Escenario{
     public SegundoNivel(){
         super("imagenes/nivel2.png");
         generarEnemigos();
-        generarEsferas();
+        generarContenedores();
         this.jefeFinal=new Yamato("imagenes/Yamato1.png", 350, 100-5450);
         
         
@@ -169,7 +169,7 @@ public class SegundoNivel extends Escenario{
 
     }
 
-    public void generarEsferas(){
+    public void generarContenedores(){
         /*
         //Esferas Power
         this.addEsfera(new EsferaPowerUp("imagenes/powerNegro0.png", 630, 4650-5450));
@@ -180,9 +180,9 @@ public class SegundoNivel extends Escenario{
         //Esferas Arma
         
         try {
-            raf2 = new RandomAccessFile("esferas.dat", "rw");
+            raf2 = new RandomAccessFile("contenedor.dat", "rw");
  
-            for (Esfera e: esferas) {
+            for (Esfera e: contenedor) {
                 raf2.writeDouble(e.positionX);
                 raf2.writeDouble(e.positionY);
             }
