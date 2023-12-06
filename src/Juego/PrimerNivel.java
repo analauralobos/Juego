@@ -19,8 +19,7 @@ public final class PrimerNivel extends Escenario{
         generarEnemigos();
         generarContenedores();
         this.jefeFinal=new Tone("imagenes/Tone1.png", 350, 5000-6400);
-        
-        
+              
         checkpoint=new int[]{-4850,-4250,-2000,-700,0};
         
         

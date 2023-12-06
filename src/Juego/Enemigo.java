@@ -8,7 +8,7 @@ public abstract class Enemigo extends Personaje{
     protected double timerDisparo=0;
     protected int puntosAlMorir;
     protected int timer=0;
-    
+    Sonido musica = new Sonido();
 
     public enum estadoEnemigo{
         VIVO,
@@ -45,7 +45,8 @@ public abstract class Enemigo extends Personaje{
 
         if(timer==0){
             try {
-//                FXPlayer.FUEGO.play(-5.0f);
+               musica.setFile(1);
+               musica.play();
             } catch (Exception e) {
                 e.printStackTrace();
             }

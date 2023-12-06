@@ -16,7 +16,7 @@ public class BonusArma extends ContenedorBonus{
     }
 
     tipoArma bonusArma;
-
+    Sonido musica = new Sonido();
     public BonusArma(String filename,int x,int y, tipoArma tp) {
         super(filename);
         this.positionX=x;
@@ -225,32 +225,38 @@ public class BonusArma extends ContenedorBonus{
     private void otorgarArma(){
         switch(bonusArma){
             case P38MUNICION:{
-                //Sonido.BONUS.play(-5.0f);
+                musica.setFile(4);
+                musica.play();
                 BatallaMidway1943.sumarScore(1000);
             }
             break;
             case LASER:{
-                //Sonido.BONUS.play(-5.0f);
+                musica.setFile(4);
+                musica.play();
                 P38Avion.p38avion.arma.cambiarMunicion("LASER");
             }
             break;
             case AMETRALLADORA:{
-                //Sonido.BONUS.play(-5.0f);
+                musica.setFile(4);
+                musica.play();
                 P38Avion.p38avion.arma.cambiarMunicion("AMETRALLADORA");
             }
             break;
             case REFUERZOS:{
-                //Sonido.BONUS.play(-5.0f);
+                musica.setFile(4);
+                musica.play();
                 P38Avion.p38avion.arma.cambiarMunicion("REFUERZOS");
             }
             break;
             case ESCOPETA:{
-                //Sonido.BONUS.play(-5.0f);
+                musica.setFile(4);
+                musica.play();
                 P38Avion.p38avion.arma.cambiarMunicion("ESCOPETA"); 
             }
             break;
             case BOMBA:{
-                //Sonido.BONUS.play(-5.0f);
+                musica.setFile(4);
+                musica.play();
                 P38Avion.p38avion.arma.cambiarMunicion("BOMBA"); 
             }
             break;
